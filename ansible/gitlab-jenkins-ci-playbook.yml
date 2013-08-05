@@ -1,0 +1,30 @@
+---
+#this ansible playbook will provision a gitlab and jenkins ci server
+- name: Install and configure the gitlab and jenkins ci apps
+  hosts: servers
+  user: vagrant
+  sudo: yes
+  tasks:
+
+  - name: install git
+    apt: pkg=git state=latest
+
+  #- name: git clone latest version of ICTO/ansible-jenkins
+  #  git: repo=https://github.com/ICTO/ansible-jenkins.git dest=/vagrant/ansible-jenkins
+
+  #- name: git clone latest version of tingtun/ansible-playbook-gitlab
+  #  git: repo=https://github.com/tingtun/ansible-playbook-gitlab.git dest=/vagrant/ansible-playbook-gitlab
+
+  - name: update hosts file for jenkins install
+    lineinfile: dest=/etc/ansible/hosts regexp='^\[jenkins\]' line='[jenkins]\nlocalhost\n'
+ 
+  - name: update hosts file for gitlab install
+    lineinfile: dest=/etc/ansible/hosts regexp='^\[gitlab\]' line='[gitlab]\nlocalhost\n'
+
+  #- name: customize gitlab config file
+  #  lineinfile: create=yes dest=/vagrant/ansible-playbook-gitlab/vars.yml regexp='^domain' line='---\ndomain_name:\tprecise32' state=present
+  #  lineinfile: dest=/vagrant/ansible-playbook-gitlab/vars.yml regexp='^database' line='database_password:\tfubar!@#' state=present
+
+  - name: Done, Give it a try!
+    action: debug msg="Find Jenkins at http://localhost:8080/"
+    action: debug msg="Find gitlab at http://localhost:8000/"
